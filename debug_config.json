@@ -1,0 +1,21 @@
+{
+		"abi_paths": {
+				"uni": "./abi/Uni.json",
+				"timelock": "./abi/Timelock.json",
+				"governor_alpha": "./abi/GovernorAlpha.json",
+				"weth9": "./abi/WETH9.json",
+				"uniswap_v1factory": "./abi/UniswapV1Factory.json",
+				"uniswap_v1exchange": "./abi/UniswapV1Exchange.json",
+				"uniswap_v2factory": "./abi/UniswapV2Factory.json",
+				"uniswap_v2router01": "./abi/UniswapV2Router01.json",
+				"uniswap_v2router02": "./abi/UniswapV2Router02.json",
+				"router_event_emitter": "./abi/RouterEventEmitter.json",
+				"uniswap_v2migrator": "./abi/UniswapV2Migrator.json",
+				"multicall": "./abi/Multicall.json",
+				"erc20": "./abi/ERC20.json",
+				"erc20wrapper": "./abi/IERC20.json",
+				"example": "./abi/ExampleFlashSwap.json"
+		},
+		"key_path": "./debug-key.txt",
+		"url": "http://localhost:9090/solana"
+}
