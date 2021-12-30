@@ -11,7 +11,8 @@ use web3_tools::{ AsEip55, deploy_contract, get_contract_from_abi_file };
 use ethers_tools::EthersUtils;
 
 use neonevm_sdk::{
-    types::{ EthAddress, Erc20Specs, Erc20DeploySpecs, get_erc20_deploy_specs },
+    // types::{ EthAddress, Erc20Specs },
+    types::{ Erc20Specs },
 };
 
 mod liquidity;
@@ -319,33 +320,40 @@ async fn main() {
     println!("{:?}", neon_token);
 
     let swap_token_weth_partner: SwapToken =
-    SwapToken::Erc20(
-        Erc20Token {
-            specs: Erc20Specs {
-                    name: "WETH Partner".to_string(),
-                    symbol: "WETHP".to_string(),
-                    decimals: 18,
-                },
-            eth_address: EthAddress::from_str("0xC59dEC342962109CB5F3bCF14e088347DFDC5e72").unwrap(),
-            means: Erc20Means::Origin,
-        }
-    );
+        SwapToken::Erc20(
+            Erc20Token {
+                specs: Erc20Specs {
+                        name: "WETH Partner".to_string(),
+                        symbol: "WETHP".to_string(),
+                        decimals: 18,
+                    },
+                // eth_address: EthAddress::from_str("0xC59dEC342962109CB5F3bCF14e088347DFDC5e72").unwrap(),
+                eth_address: presumed_weth_partner_address.into(),
+                means: Erc20Means::Origin,
+            }
+        );
     // println!("WETH Partner: {:?}", token_weth_partner);
 
     let neonswap: NeonswapEnvironment =
         NeonswapEnvironment::new(
             web3,
-            paths.clone(),
-            presumed_uniswap_v1factory_address,
-            presumed_uniswap_v2factory_address,
-            presumed_uniswap_v2router02_address,
+            &eth_private_key,
+            ethers_utils,
+            // paths.clone(),
+            // presumed_uniswap_v1factory_address,
+            // presumed_uniswap_v2factory_address,
+            // presumed_uniswap_v2router02_address,
         );
 
-    let uniswap_v1factory_create_exchange = 
-        uniswap_v1factory.signed_call_with_confirmations("createExchange", presumed_weth_partner_address, neonswap.default_web3_options(), 0, &key)
-            .await
-            .unwrap();
-    println!("{:?}", uniswap_v1factory_create_exchange);
+    if transaction_count < 17 {
+        let uniswap_v1factory_create_exchange = 
+            uniswap_v1factory.signed_call_with_confirmations("createExchange", presumed_weth_partner_address, neonswap.default_web3_options(), 0, &key)
+                .await
+                .unwrap();
+        println!("createExchange: {:?}", uniswap_v1factory_create_exchange);
+    } else {
+        println!("createExchange Exists");
+    }
     
     let uniswap_v2_get_exchange_address: Address = 
         uniswap_v1factory.query("getExchange", presumed_weth_partner_address, neonswap.signing_address, neonswap.default_web3_options(), None)
